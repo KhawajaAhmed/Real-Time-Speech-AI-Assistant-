@@ -83,3 +83,30 @@ class AI_Assistant:
 
         print("Llama 3:", end="\r\n")
 
+        text_buffer = ""
+        full_text = ""
+        for chunk in ollama_stream:
+            text_buffer += chunk['message']['content']
+            if text_buffer.endswith('.'):
+                audio_stream = self.client.generate(text=text_buffer,
+                                                    model="eleven_turbo_v2",
+                                                    stream=True)
+                print(text_buffer, end="\n", flush=True)
+                stream(audio_stream)
+                full_text += text_buffer
+                text_buffer = ""
+        
+        if text_buffer:
+            audio_stream = self.client.generate(text=text_buffer,
+                                                    model="eleven_turbo_v2",
+                                                    stream=True)
+            print(text_buffer, end="\n", flush=True)
+            stream(audio_stream)
+            full_text += text_buffer
+
+        self.full_transcript.append({"role":"assistant", "content":full_text})
+
+        self.start_transcription()
+
+ai_assistant = AI_Assistant()
+ai_assistant.start_transcription()
