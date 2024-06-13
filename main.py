@@ -68,6 +68,18 @@ class AI_Assistant:
         #print("Closing Session")
         return
     
-    
-    
+    ###### Step 3: Pass real-time transcript to LLAMA 3 ######
+    def generate_ai_response(self, transcript):
+        self.stop_transcription()
+
+        self.full_transcript.append({"role":"user", "content":transcript.text})
+        print(f"\nUser:{transcript.text}", end="\r\n")
+
+        ollama_stream = ollama.chat(
+            model="llama3",
+            messages=self.full_transcript,
+            stream=True,
+        )
+
+        print("Llama 3:", end="\r\n")
 
