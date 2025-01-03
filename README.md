@@ -1,5 +1,3 @@
-# ai_assistant
-
 # Real-Time AI Assistant
 
 ## Project Overview
